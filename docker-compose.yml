@@ -1,0 +1,37 @@
+services:
+  roles-db:
+    image: postgres:alpine
+    container_name: db-roles
+    restart: always
+    environment:
+      - POSTGRES_DB=roles
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - DB_PORT=5432
+    ports:
+      - '5432:5432'
+    expose:
+      - '5432'
+    volumes:
+      - db-data:/var/lib/postgresql/roles
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres']
+      interval: 1s
+      timeout: 1s
+      retries: 15
+
+#  datadog:
+#    image: datadog/agent
+#    environment:
+#      - DD_API_KEY=${DD_API_KEY}
+#      - DD_SITE=us5.datadoghq.com
+#      - DD_LOGS_ENABLED=true
+#      - DD_APM_ENABLED=true
+#    volumes:
+#      - /var/run/docker.sock:/var/run/docker.sock
+#      - /proc/:/host/proc/:ro
+#      - /sys/fs/cgroup:/host/sys/fs/cgroup:ro
+
+
+volumes:
+  db-data:
