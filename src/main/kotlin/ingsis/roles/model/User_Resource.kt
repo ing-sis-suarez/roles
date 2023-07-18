@@ -12,19 +12,19 @@ class User_Resource {
     var id: UUID? = null
 
     @Column(name = "userId", nullable = false)
-    var userId: UUID? = null
+    var userId: String? = null
 
     @ManyToOne
     @JoinColumn(name = "roleId", nullable = false)
-    var roleId: Role? = null
+    var role: Role? = null
 
     @ManyToOne
     @JoinColumn(name = "resourceId", nullable = false)
-    var resourceId: Resource? = null
+    var resource: Resource? = null
 
-    constructor(userId: UUID?, roleId: Role?, resourceId: Resource?) {
+    constructor(userId: String?, roleId: Role?, resourceId: Resource?) {
         this.userId = userId
-        this.roleId = roleId
-        this.resourceId = resourceId
+        this.role = roleId
+        this.resource = resourceId
     }
 }

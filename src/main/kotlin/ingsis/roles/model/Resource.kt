@@ -4,6 +4,12 @@ import java.util.*
 import javax.persistence.*
 
 @Entity
+@Table(
+    name = "resource",
+    uniqueConstraints = [UniqueConstraint(columnNames = ["resource_type_id", "resource_id"])]
+)
+
+
 class Resource {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -11,10 +17,13 @@ class Resource {
     var id: UUID? = null
 
     @ManyToOne
-    @JoinColumn(name = "resourceTypeId", nullable = false)
+    @JoinColumn(name = "resource_type_id", nullable = false)
     var resourceType: ResourceType? = null
 
-    @Column(name = "resourceId", nullable = false)
+    @OneToMany(mappedBy = "resource", cascade = [CascadeType.ALL])
+    var userResources: List<User_Resource>? = null
+
+    @Column(name = "resource_id", nullable = false)
     var resourceId: UUID? = null
 
 

@@ -25,12 +25,12 @@ class ResourceController {
     @GetMapping("/hello")
     fun hello() = "Hello"
 
-    @PostMapping("/resource/create")
+    @PostMapping("/resource")
     fun createResource(@RequestBody dto: CreateResourceDTO, principal: Principal): ResponseEntity<UUID> {
-        return ResponseEntity(resourceService.createResource(dto, UUID.fromString(principal.name)), HttpStatus.CREATED)
+        return ResponseEntity(resourceService.createResource(dto, principal.name), HttpStatus.CREATED)
     }
 
-    @DeleteMapping("/resource/delete")
+    @DeleteMapping("/resource")
     fun deleteResource(@RequestBody dto: DeleteResourceRequestDTO, principal: Principal): ResponseEntity<Boolean> {
         return ResponseEntity(resourceService.deleteResource(dto), HttpStatus.OK)
     }

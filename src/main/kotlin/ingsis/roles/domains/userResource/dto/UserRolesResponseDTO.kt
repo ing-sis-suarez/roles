@@ -1,4 +1,4 @@
 package ingsis.roles.domains.userResource.dto
 
-class UserRolesResponseDTO(val role: List<String>) {
+class UserRolesResponseDTO(val roles: List<String>) {
 }
