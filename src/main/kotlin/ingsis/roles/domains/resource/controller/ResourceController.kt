@@ -2,18 +2,16 @@ package ingsis.roles.domains.resource.controller
 
 import ingsis.roles.domains.resource.dto.CreateResourceDTO
 import ingsis.roles.domains.resource.service.ResourceService
+import ingsis.roles.domains.userResource.dto.DeleteResourceRequestDTO
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.web.bind.annotation.CrossOrigin
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.*
 import java.security.Principal
+import java.util.*
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping("/resources")
 class ResourceController {
 
     @Autowired
@@ -27,8 +25,15 @@ class ResourceController {
     @GetMapping("/hello")
     fun hello() = "Hello"
 
-    @PostMapping("/create")
-    fun createResource(@RequestBody dto: CreateResourceDTO, principal: Principal) {
-        val result = resourceService.createResource(dto)
+    @PostMapping("/resource/create")
+    fun createResource(@RequestBody dto: CreateResourceDTO, principal: Principal): ResponseEntity<UUID> {
+        return ResponseEntity(resourceService.createResource(dto, UUID.fromString(principal.name)), HttpStatus.CREATED)
     }
+
+    @DeleteMapping("/resource/delete")
+    fun deleteResource(@RequestBody dto: DeleteResourceRequestDTO, principal: Principal): ResponseEntity<Boolean> {
+        return ResponseEntity(resourceService.deleteResource(dto), HttpStatus.OK)
+    }
+
+
 }

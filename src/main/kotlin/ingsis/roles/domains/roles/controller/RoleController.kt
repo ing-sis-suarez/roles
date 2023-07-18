@@ -23,8 +23,5 @@ class RoleController {
         this.roleService = roleService
     }
 
-    @PostMapping("/create")
-    fun createResource(@RequestBody role: CreateResourceDTO) {
-        val result = roleService.createResource(role)
-    }
+
 }

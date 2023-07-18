@@ -16,9 +16,5 @@ class RoleServiceImpl : RoleService {
         this.roleRepository = roleRepository
     }
 
-    override fun createResource(role: CreateResourceDTO): Boolean {
-        TODO("Not yet implemented")
-    }
-
 
 }

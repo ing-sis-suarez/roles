@@ -4,5 +4,5 @@ import ingsis.roles.domains.resource.dto.CreateResourceDTO
 
 
 interface RoleService {
-    fun createResource(role: CreateResourceDTO): Boolean
+    
 }
