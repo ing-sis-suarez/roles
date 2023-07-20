@@ -24,7 +24,6 @@ class UserResourceController {
         this.userResourceService = userResourceService
     }
 
-
     @PostMapping("/share")
     fun createUserResource(@RequestBody dto: EditUserResourceDTO, principal: Principal): ResponseEntity<UUID> {
         return ResponseEntity(userResourceService.createUserResource(dto, principal.name), HttpStatus.CREATED)
