@@ -4,6 +4,7 @@ import ingsis.roles.domains.resource.repository.ResourceRepository
 import ingsis.roles.domains.roles.repository.RoleRepository
 import ingsis.roles.domains.type.repository.TypeRepository
 import ingsis.roles.domains.userResource.dto.EditUserResourceDTO
+import ingsis.roles.domains.userResource.dto.IdList
 import ingsis.roles.domains.userResource.repository.UserResourceRepository
 import ingsis.roles.error.HTTPError
 import ingsis.roles.model.User_Resource
@@ -61,6 +62,12 @@ class UserResourceServiceImpl : UserResourceService {
         val userResource = userResourceRepository.findByRoleIdUserIdAndResourceId(roleToDelete, dto.userId, resource) ?: throw HTTPError("User does not have this role", HttpStatus.NOT_FOUND)
         userResourceRepository.delete(userResource)
         return true
+    }
+
+    override fun getUserResourcesByOwner(ownerId: String, resourceType: String): IdList {
+        val type = typeRepository.findByName(resourceType) ?: throw HTTPError("Resource type not found", HttpStatus.NOT_FOUND)
+        val ownedResources = userResourceRepository.findByOwnerId(ownerId, type)
+        return IdList(ownedResources.map { it.resource!!.resourceId!! })
     }
 
     override fun getRoles(resourceId: UUID, resourceType: String, userId: String): List<String> {

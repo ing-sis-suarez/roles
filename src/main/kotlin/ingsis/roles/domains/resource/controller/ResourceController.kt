@@ -22,12 +22,18 @@ class ResourceController {
         this.resourceService = resourceService
     }
 
-    @GetMapping("/hello")
-    fun hello() = "Hello"
 
     @PostMapping("/resource")
     fun createResource(@RequestBody dto: CreateResourceDTO, principal: Principal): ResponseEntity<UUID> {
         return ResponseEntity(resourceService.createResource(dto, principal.name), HttpStatus.CREATED)
+    }
+
+    @GetMapping("/resource")
+    fun getResource(
+        @RequestParam(name = "resourceType") resourceType: String,
+        principal: Principal,
+        ): ResponseEntity<UUID?> {
+        return ResponseEntity(resourceService.getResourceByresourceTypeAndOwner(resourceType, principal.name), HttpStatus.OK)
     }
 
     @DeleteMapping("/resource")

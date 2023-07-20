@@ -1,22 +1,16 @@
 package ingsis.roles.domains.userResource.controller;
 
 
-import ingsis.roles.domains.userResource.dto.EditUserResourceDTO;
+import ingsis.roles.domains.userResource.dto.EditUserResourceDTO
+import ingsis.roles.domains.userResource.dto.IdList
 import ingsis.roles.domains.userResource.dto.UserRolesResponseDTO
 import ingsis.roles.domains.userResource.service.UserResourceService
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController;
-
-import java.security.Principal;
-import java.util.UUID;
+import org.springframework.web.bind.annotation.*
+import java.security.Principal
+import java.util.*
 
 @RestController
 @CrossOrigin("*")
@@ -46,10 +40,18 @@ class UserResourceController {
         @RequestParam(name = "resourceId") resourceId: UUID,
         @RequestParam(name = "resourceType") resourceType: String,
         principal: Principal
-        ): ResponseEntity<UserRolesResponseDTO> {
+    ): ResponseEntity<UserRolesResponseDTO> {
         return ResponseEntity(
             UserRolesResponseDTO(userResourceService.getRoles(resourceId, resourceType, principal.name)),
             HttpStatus.OK
         )
+    }
+
+    @GetMapping("/resources")
+    fun getResourcesByOwnerAndType(
+        @RequestParam(name = "resourceType") resourceType: String,
+        principal: Principal
+    ): ResponseEntity<IdList> {
+        return ResponseEntity(userResourceService.getUserResourcesByOwner(principal.name, resourceType), HttpStatus.OK)
     }
 }

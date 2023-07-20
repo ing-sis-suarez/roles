@@ -42,6 +42,13 @@ class ResourceServiceImpl : ResourceService {
         this.roleRepository = roleRepository
     }
 
+    override fun getResourceByresourceTypeAndOwner(resourceType: String, ownerId: String): UUID? {
+        val type = typeRepository.findByName(resourceType) ?: throw HTTPError("Resource type not found", HttpStatus.NOT_FOUND)
+        val role = roleRepository.findByNameAndResourceType("owner", type) ?: throw HTTPError("Owner role not found", HttpStatus.NOT_FOUND)
+        val userResource = userResourceRepository.findByRoleIdUserIdAndResourceType(role, ownerId, type) ?: throw HTTPError("Resource not found", HttpStatus.NOT_FOUND)
+        return userResource.resource!!.id!!
+    }
+
     override fun createResource(dto: CreateResourceDTO, ownerId: String): UUID {
         val type = typeRepository.findByName(dto.resourceType) ?: throw HTTPError("Resource type not found", HttpStatus.NOT_FOUND)
         val role = roleRepository.findByNameAndResourceType("owner", type) ?: throw HTTPError("Owner role not found", HttpStatus.NOT_FOUND)
