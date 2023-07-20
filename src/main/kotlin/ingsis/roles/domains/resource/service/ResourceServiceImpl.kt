@@ -5,6 +5,7 @@ import ingsis.roles.domains.resource.repository.ResourceRepository
 import ingsis.roles.domains.roles.repository.RoleRepository
 import ingsis.roles.domains.type.repository.TypeRepository
 import ingsis.roles.domains.userResource.dto.DeleteResourceRequestDTO
+import ingsis.roles.domains.userResource.dto.IdList
 import ingsis.roles.domains.userResource.repository.UserResourceRepository
 import ingsis.roles.error.HTTPError
 import ingsis.roles.model.Resource
@@ -40,6 +41,13 @@ class ResourceServiceImpl : ResourceService {
         this.resourceRepository = resourceRepository
         this.userResourceRepository = userResourceRepository
         this.roleRepository = roleRepository
+    }
+
+    override fun getResourcesByTypeAndRole(resourceType: String, ownerId: String, role: String): IdList {
+        val type = typeRepository.findByName(resourceType) ?: throw HTTPError("Resource type not found", HttpStatus.NOT_FOUND)
+        val role = roleRepository.findByNameAndResourceType(role, type) ?: throw HTTPError("Role not found", HttpStatus.NOT_FOUND)
+        val userResources = userResourceRepository.findByRoleIdUserId(role, ownerId, type)
+        return IdList(userResources.map { it.resource!!.resourceId!! })
     }
 
     override fun getResourceByresourceTypeAndOwner(resourceType: String, ownerId: String): UUID? {

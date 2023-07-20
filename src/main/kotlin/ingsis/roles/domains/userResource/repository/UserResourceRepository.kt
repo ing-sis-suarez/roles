@@ -18,6 +18,13 @@ interface UserResourceRepository: JpaRepository<User_Resource, UUID> {
             "AND ur.resource.resourceType = :resourceType " +
             "AND ur.role.name = 'owner'")
     fun findByOwnerId(ownerId: String, resourceType: ResourceType): List<User_Resource>
+
+    @Query("SELECT ur " +
+            "FROM User_Resource ur " +
+            "WHERE ur.resource.resourceType = :resourceType " +
+            "AND ur.userId = :userId " +
+            "AND ur.role  = :role")
+    fun findByRoleIdUserId(role: Role, userId: String, resourceType: ResourceType): List<User_Resource>
     
     @Query("SELECT ur FROM User_Resource ur WHERE ur.role = :role AND ur.userId = :userId AND ur.resource.resourceType = :resourceType")
     fun findByRoleIdUserIdAndResourceType(role: Role, userId: String, resourceType: ResourceType): User_Resource?

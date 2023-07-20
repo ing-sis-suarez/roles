@@ -20,8 +20,6 @@ class Resource {
     @JoinColumn(name = "resource_type_id", nullable = false)
     var resourceType: ResourceType? = null
 
-    @OneToMany(mappedBy = "resource", cascade = [CascadeType.ALL])
-    var userResources: List<User_Resource>? = null
 
     @Column(name = "resource_id", nullable = false)
     var resourceId: UUID? = null
