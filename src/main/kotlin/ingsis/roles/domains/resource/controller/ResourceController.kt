@@ -40,6 +40,7 @@ class ResourceController {
         )
     }
 
+
     @GetMapping("/resources/{resourceType}")
     fun getResourcesByTypeAndRole(
         @PathVariable(name = "resourceType") resourceType: String,
