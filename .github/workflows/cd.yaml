@@ -2,7 +2,7 @@ name: "Continuous Deployment"
 on:
   push:
     branches:
-      - dev
+      - prod
 jobs:
   push_to_registry:
     name: Push Docker image to GitHub Packages
@@ -17,7 +17,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
         with:
-          ref: dev
+          ref: prod
 
       - name: Authorize gradlew script
         run: chmod +x ./gradlew
@@ -41,7 +41,7 @@ jobs:
         with:
           push: true
           tags: |
-            ghcr.io/ing-sis-suarez/roles-dev:latest
+            ghcr.io/ing-sis-suarez/roles-prod:latest
 
 
   run_remote_script:
@@ -57,10 +57,10 @@ jobs:
           mkdir -p ~/.ssh/
           echo "$SSH_PRIVATE_KEY" > ../private.key
           chmod 600 ../private.key
-          ssh-keyscan ${{secrets.SSH_HOST_DEV}} >> ~/.ssh/known_hosts
+          ssh-keyscan ${{secrets.SSH_HOST_PROD}} >> ~/.ssh/known_hosts
         env:
           SSH_PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}
 
       - name: Run script on remote machine
         run: |
-          ssh -v -i ../private.key jorge@${{secrets.SSH_HOST_DEV}} "~/deploy.sh roles"
+          ssh -v -i ../private.key jorge@${{secrets.SSH_HOST_PROD}} "~/deploy.sh roles"
